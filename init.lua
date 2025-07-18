@@ -1,8 +1,3 @@
--- ================================================================================================
--- title : Suckless NeoVim Config
--- author: Radley E. Sidwell-lewis
--- ================================================================================================
-
 -- theme & transparency
 vim.cmd.colorscheme("habamax")
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
@@ -10,6 +5,8 @@ vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
 vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "none" })
 
 -- Basic settings
+-- vim.opt.title = true                               -- show title
+-- vim.opt.titlestring = "NVIM: %t"  -- show just filename
 vim.opt.number = true                              -- Line numbers
 vim.opt.relativenumber = true                      -- Relative line numbers
 vim.opt.cursorline = true                          -- Highlight current line
@@ -31,6 +28,12 @@ vim.opt.smartcase = true                           -- Case sensitive if uppercas
 vim.opt.hlsearch = false                           -- Don't highlight search results 
 vim.opt.incsearch = true                           -- Show matches as you type
 
+-- Netrw
+vim.g.netrw_banner = 0                             -- no banner for netrw
+vim.g.netrw_browse_split = 4                       -- open in prior window
+vim.g.netrw_altv = 1                               -- right splitting
+vim.g.netrw_liststyle = 3                          -- tree style view
+
 -- Visual settings
 vim.opt.termguicolors = true                       -- Enable 24-bit colors
 vim.opt.signcolumn = "yes"                         -- Always show sign column
@@ -47,6 +50,7 @@ vim.opt.conceallevel = 0                           -- Don't hide markup
 vim.opt.concealcursor = ""                         -- Don't hide cursor line markup 
 vim.opt.lazyredraw = true                          -- Don't redraw during macros
 vim.opt.synmaxcol = 300                            -- Syntax highlighting limit 
+vim.opt.syntax = "ON"
 
 -- File handling
 vim.opt.backup = false                             -- Don't create backup files
@@ -133,7 +137,7 @@ vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
 vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
 
 -- Quick file navigation
-vim.keymap.set("n", "<leader>e", ":Explore<CR>", { desc = "Open file explorer" })
+vim.keymap.set("n", "<leader>e", ":25Lex<CR>", { desc = "Open file explorer" })
 vim.keymap.set("n", "<leader>ff", ":find ", { desc = "Find file" })
 
 -- Better J behavior
@@ -370,6 +374,8 @@ vim.cmd([[
 -- Alternative navigation (more intuitive)
 vim.keymap.set('n', '<leader>tn', ':tabnew<CR>', { desc = 'New tab' })
 vim.keymap.set('n', '<leader>tx', ':tabclose<CR>', { desc = 'Close tab' })
+vim.keymap.set('n', '<Tab>', ':tabn<CR>', { desc = 'next tab gt' })
+vim.keymap.set('n', '<S-Tab>', ':tabp<CR>', { desc = 'prev tab gT' })
 
 -- Tab moving
 vim.keymap.set('n', '<leader>tm', ':tabmove<CR>', { desc = 'Move tab' })
