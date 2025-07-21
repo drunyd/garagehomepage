@@ -437,3 +437,53 @@ local function smart_close_buffer()
   end
 end
 vim.keymap.set('n', '<leader>bd', smart_close_buffer, { desc = 'Smart close buffer/tab' })
+
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
+end
+vim.opt.rtp:prepend(lazypath)
+-- Setup lazy.nvim
+require("lazy").setup({
+  spec = {
+    {
+      'nvim-treesitter/nvim-treesitter',
+      event = 'VeryLazy',
+      dependencies = {
+        'nvim-treesitter/nvim-treesitter-textobjects',
+      },
+      build = ':TSUpdate',
+      opts = {
+        highlight = {
+          enable = true,
+          disable = { "c", "rust", "latex", "tex" },
+        },
+        indent = { enable = true },
+        auto_install = true,
+        ensure_installed = { 'lua' },
+      },
+      config = function (_, opts)
+        local configs = require("nvim-treesitter.configs")
+        configs.setup(opts)
+        require("nvim-treesitter.install").compilers = { "clang" }
+      end
+    },
+    -- add your other plugins here
+  },
+  -- Configure any other settings here. See the documentation for more details.
+  -- colorscheme that will be used when installing plugins.
+  install = { colorscheme = { "habamax" } },
+  -- automatically check for plugin updates
+  checker = { enabled = true },
+})
